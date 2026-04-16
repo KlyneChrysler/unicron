@@ -35,6 +35,11 @@ Run each check in order. If any check fails, the gate is BLOCKED.
 **PASSED:**
 > "Phase N gate passed. All tasks complete, tests passing, reviewers signed off. Proceeding to Phase N+1."
 
+Invoke `memory-writer` with:
+- `content`: "Phase [N] gate passed. Agents involved: [list]. All acceptance criteria met. Test suite: passing. Notable issues: [summary or 'none']."
+- `event`: `gate-passed`
+- `context`: `{ phase: N, tags: ["phase-gate", "<primary tech tags from spec>"] }`
+
 Invoke `dispatcher` to begin Phase N+1.
 
 **BLOCKED:**
