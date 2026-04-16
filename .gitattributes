@@ -1,0 +1,5 @@
+# Tell GitHub Linguist to ignore non-code files for language detection
+skills/**/*.md linguist-documentation
+agents/*.md linguist-documentation
+docs/**/*.md linguist-documentation
+*.md linguist-documentation
