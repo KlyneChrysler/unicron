@@ -32,6 +32,28 @@ After Q5, compute a score (0–100%) for each of these 6 dimensions:
 
 For any dimension below 70%, generate one targeted question and ask it. Continue until all dimensions ≥ 70%.
 
+## Preference Detection
+
+After EVERY answer (Q1–Q5 and any follow-up questions), scan the answer for expressed preferences:
+
+**Signals to detect:**
+- "I always use X" / "I never use X"
+- "I prefer X" / "I like X"
+- "we always do X" / "we don't do X"
+- Strong opinions about tools, patterns, or process
+
+**When detected:**
+Invoke `memory-writer` with:
+- `content`: the expressed preference in one sentence
+- `event`: `preference-detected`
+
+Do this silently — do not interrupt the investigation flow to announce it.
+
+**Examples:**
+- "I always use Tailwind for styling" → write: "User always uses Tailwind CSS for styling."
+- "we never use ORM, raw SQL only" → write: "User prefers raw SQL over ORMs."
+- "I like minimal approval gates" → write: "User prefers minimal approval gates — skip optional confirmation prompts."
+
 ## Live Context Panel
 
 After EVERY answer (including Q1–Q5), show this panel updated with what you know:
