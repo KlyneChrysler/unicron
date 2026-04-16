@@ -52,7 +52,16 @@ async function runAdapter(platform, baseDir) {
 const homeArgIndex = process.argv.indexOf('--home');
 const homeOverride = homeArgIndex !== -1 ? process.argv[homeArgIndex + 1] : null;
 
+const KNOWN_COMMANDS = new Set(['init']);
+const positionalArgs = process.argv.slice(2).filter(arg => !arg.startsWith('--') && arg !== homeOverride);
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
+	if (positionalArgs.length > 0 && !KNOWN_COMMANDS.has(positionalArgs[0])) {
+		console.error(`Unknown command: ${positionalArgs[0]}`);
+		console.error('Usage: npx unicron init [--home <dir>]');
+		process.exit(1);
+	}
+
 	const targetHome = homeOverride ?? homedir();
 	const platforms = detectPlatforms(targetHome);
 

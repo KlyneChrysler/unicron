@@ -26,6 +26,8 @@ curl -fsSL https://unicron.sh/install | sh
 
 Unicron auto-detects which AI platforms are present on your machine and installs the appropriate adapters. No configuration required.
 
+> Requires Node.js 18 or later.
+
 ---
 
 ## Usage
