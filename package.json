@@ -7,5 +7,6 @@
   "scripts": { "test": "node --experimental-vm-modules node_modules/.bin/jest" },
   "keywords": ["ai", "agents", "sdlc", "claude", "gemini"],
   "license": "MIT",
+  "engines": { "node": ">=18" },
   "devDependencies": { "jest": "^29.0.0" }
 }

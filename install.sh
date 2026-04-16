@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 echo "Installing Unicron..."
 if ! command -v node &> /dev/null; then
   echo "Error: Node.js is required. Install from https://nodejs.org"
