@@ -1,0 +1,6 @@
+{
+  "name": "unicron",
+  "description": "Full SDLC AI agent system: investigate → spec → plan → build with a 13-agent IT department",
+  "version": "1.0.0",
+  "contextFileName": "GEMINI.md"
+}
