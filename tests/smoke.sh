@@ -35,12 +35,22 @@ grep -q "<!-- unicron-start -->" "$TEMP_HOME/.claude/CLAUDE.md" \
 	&& pass "CLAUDE.md contains <!-- unicron-start -->" \
 	|| fail "CLAUDE.md missing <!-- unicron-start --> marker"
 
-# 4. skills/unicron/ directory exists
+# 4. memory/preferences/ directory exists
+[ -d "$TEMP_HOME/.unicron/memory/preferences" ] \
+	&& pass ".unicron/memory/preferences/ directory exists" \
+	|| fail ".unicron/memory/preferences/ directory missing"
+
+# 5. MEMORY.md file exists
+[ -f "$TEMP_HOME/.unicron/memory/MEMORY.md" ] \
+	&& pass ".unicron/memory/MEMORY.md exists" \
+	|| fail ".unicron/memory/MEMORY.md missing"
+
+# 6. skills/unicron/ directory exists
 [ -d "$TEMP_HOME/.claude/skills/unicron" ] \
 	&& pass "skills/unicron/ directory exists" \
 	|| fail "skills/unicron/ directory not found"
 
-# 5. each SKILL.md present
+# 7. each SKILL.md present
 SKILLS=(unicron investigate spec-writer planner dispatcher gate-checker auditor)
 for skill in "${SKILLS[@]}"; do
 	[ -f "$TEMP_HOME/.claude/skills/unicron/$skill/SKILL.md" ] \
@@ -48,7 +58,7 @@ for skill in "${SKILLS[@]}"; do
 		|| fail "skills/unicron/$skill/SKILL.md not found"
 done
 
-# 6. each agent .md present
+# 8. each agent .md present
 AGENTS=(
 	cto
 	solutions-architect
