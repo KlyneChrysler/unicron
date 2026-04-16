@@ -1,0 +1,107 @@
+# Unicron Agent Registry
+# Single source of truth for all agents. The CTO orchestrator reads this to assemble mini-teams per task.
+
+agents:
+  cto:
+    description: "Orchestrator. Reads spec + plan, assembles mini-teams, dispatches specialists, runs gate checks. Never writes code directly."
+    capabilities: [orchestration, planning, delegation, gate-checks, progress-tracking]
+    triggers: [any-task, phase-start, phase-end, blocker]
+    works_with: [all]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: agents/cto.md
+
+  solutions-architect:
+    description: "System design, architecture decisions, pattern selection, API design, scalability planning."
+    capabilities: [architecture, design-patterns, api-design, scalability, tech-selection]
+    triggers: [new-project, major-feature, tech-decision, refactor]
+    works_with: [cto, backend-dev, database-admin, devops-sre]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: agents/solutions-architect.md
+
+  ux-designer:
+    description: "User flows, wireframes, interaction design, component specs, accessibility."
+    capabilities: [wireframes, user-flows, component-design, accessibility, information-architecture]
+    triggers: [new-feature, ui-change, user-research, onboarding-flow]
+    works_with: [frontend-dev, product-analyst, cto]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: agents/ux-designer.md
+
+  frontend-dev:
+    description: "UI implementation, components, state management, routing, performance."
+    capabilities: [components, styling, state-management, routing, a11y, performance, bundling]
+    triggers: [ui-feature, component, page, frontend-bug, styling]
+    works_with: [ux-designer, backend-dev, qa-engineer]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: agents/frontend-dev.md
+
+  backend-dev:
+    description: "APIs, business logic, services, middleware, integrations."
+    capabilities: [api, business-logic, services, middleware, integrations, caching, queues]
+    triggers: [api-feature, service, backend-bug, integration, data-processing]
+    works_with: [solutions-architect, database-admin, security-engineer, frontend-dev]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: agents/backend-dev.md
+
+  mobile-dev:
+    description: "iOS, Android, and cross-platform mobile (React Native, Flutter, Swift, Kotlin)."
+    capabilities: [ios, android, react-native, flutter, push-notifications, offline-sync, app-store]
+    triggers: [mobile-feature, mobile-bug, native-integration, app-release]
+    works_with: [backend-dev, ux-designer, qa-engineer]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: agents/mobile-dev.md
+
+  database-admin:
+    description: "Schema design, migrations, query optimization, indexing, data integrity."
+    capabilities: [schema, migrations, query-optimization, indexing, replication, backup, data-modeling]
+    triggers: [new-model, migration, slow-query, data-integrity, scaling]
+    works_with: [backend-dev, solutions-architect, devops-sre]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: agents/database-admin.md
+
+  qa-engineer:
+    description: "Unit, integration, and E2E tests. Test strategy, coverage analysis, regression prevention."
+    capabilities: [unit-tests, integration-tests, e2e-tests, test-strategy, coverage, regression]
+    triggers: [any-feature, bug-fix, release, coverage-gap]
+    works_with: [frontend-dev, backend-dev, mobile-dev, security-engineer]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: agents/qa-engineer.md
+
+  security-engineer:
+    description: "Auth, vulnerability scanning, OWASP checks, compliance, secrets management."
+    capabilities: [auth, owasp, vulnerability-scan, compliance, secrets, rate-limiting, encryption]
+    triggers: [auth-feature, data-handling, api-design, pre-release, compliance-requirement]
+    works_with: [backend-dev, devops-sre, solutions-architect]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: agents/security-engineer.md
+
+  devops-sre:
+    description: "CI/CD pipelines, infrastructure, deployment, monitoring, alerting, reliability."
+    capabilities: [ci-cd, infrastructure, deployment, monitoring, alerting, scaling, containerization]
+    triggers: [deployment, infra-change, performance-issue, incident, release-pipeline]
+    works_with: [backend-dev, security-engineer, database-admin]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: agents/devops-sre.md
+
+  technical-writer:
+    description: "READMEs, API docs, changelogs, inline docs, onboarding guides, runbooks."
+    capabilities: [readme, api-docs, changelog, inline-docs, runbooks, onboarding]
+    triggers: [new-feature, api-change, release, onboarding, post-implementation]
+    works_with: [backend-dev, frontend-dev, devops-sre]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: agents/technical-writer.md
+
+  product-analyst:
+    description: "Requirements analysis, metrics definition, acceptance criteria, user story refinement."
+    capabilities: [requirements, metrics, acceptance-criteria, user-stories, stakeholder-alignment]
+    triggers: [new-feature, spec-review, unclear-requirements, success-metrics]
+    works_with: [cto, ux-designer, qa-engineer]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: agents/product-analyst.md
+
+  code-reviewer:
+    description: "Cross-cutting code review: quality, patterns, consistency, DRY, complexity, maintainability."
+    capabilities: [code-quality, patterns, consistency, complexity, maintainability, refactoring]
+    triggers: [post-implementation, pre-commit, phase-gate, pull-request]
+    works_with: [all]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: agents/code-reviewer.md
