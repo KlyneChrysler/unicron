@@ -57,6 +57,9 @@ Unicron auto-detects which AI platforms are present on your machine and installs
 | `/unicron:status` | Show current phase, active agents, progress, and blockers |
 | `/unicron:audit` | Generate a codebase health report |
 | `/unicron:agent <name>` | Invoke a named specialist agent directly |
+| `/unicron:remember <note>` | Manually save a memory entry (decision, outcome, or preference) |
+| `/unicron:forget <topic>` | Find and delete matching memory entries from project + global |
+| `/unicron:memory` | Show all memory entries for this project and global profile |
 
 ---
 

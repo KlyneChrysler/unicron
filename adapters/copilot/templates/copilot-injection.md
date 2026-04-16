@@ -22,6 +22,9 @@ When the user says `/unicron` or asks you to "start unicron":
 | `/unicron:status` | Show current phase and progress |
 | `/unicron:audit` | Run a standalone codebase health report |
 | `/unicron:agent <name>` | Invoke a specialist directly |
+| `/unicron:remember <note>` | Manually save a memory entry |
+| `/unicron:forget <topic>` | Find and delete matching memory entries |
+| `/unicron:memory` | Show all memory entries for this project + global |
 
 ## Specialist Roster
 

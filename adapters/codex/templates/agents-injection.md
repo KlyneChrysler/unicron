@@ -28,6 +28,22 @@ On `/unicron`:
 | product-analyst | Requirements, acceptance criteria |
 | code-reviewer | Quality gate — always last |
 
+## Commands
+
+| Command | What it does |
+|---|---|
+| `/unicron` | Start or resume the full SDLC workflow |
+| `/unicron:investigate` | Run the investigation loop |
+| `/unicron:spec` | View or generate the project spec |
+| `/unicron:plan` | View or generate the implementation plan |
+| `/unicron:dispatch` | Trigger next agent task dispatch |
+| `/unicron:status` | Show current phase and progress |
+| `/unicron:audit` | Run a standalone codebase health report |
+| `/unicron:agent <name>` | Invoke a specialist directly |
+| `/unicron:remember <note>` | Manually save a memory entry |
+| `/unicron:forget <topic>` | Find and delete matching memory entries |
+| `/unicron:memory` | Show all memory entries for this project + global |
+
 ## Key Files
 - `docs/unicron/spec.md` — immutable approved spec
 - `docs/unicron/plan.md` — phased plan

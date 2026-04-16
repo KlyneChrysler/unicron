@@ -14,6 +14,14 @@ Unicron is installed. It provides a complete IT department of 13 AI agents for t
 | `/unicron:status` | Show current phase and progress |
 | `/unicron:audit` | Run a standalone codebase health report |
 | `/unicron:agent <name>` | Invoke a specialist directly |
+| `/unicron:remember <note>` | Manually save a memory entry |
+| `/unicron:forget <topic>` | Find and delete matching memory entries |
+| `/unicron:memory` | Show all memory entries for this project + global |
+
+### Memory
+
+Global preferences: `~/.unicron/memory/`
+Project decisions + outcomes: `.unicron/memory/`
 
 ### Available Agents
 
