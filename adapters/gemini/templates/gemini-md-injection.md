@@ -1,11 +1,11 @@
-## Unicron — Full SDLC AI Agent System
+## Unicron — 完整 SDLC AI Agent 系统
 
-Unicron is installed. Activate skills using `activate_skill`.
+Unicron 已安装。使用 `activate_skill` 激活技能。
 
-### Skill Activation (Gemini CLI)
+### 技能激活（Gemini CLI）
 
 ```
-activate_skill("unicron")           // main entry point
+activate_skill("unicron")           // 主入口点
 activate_skill("unicron:investigate")
 activate_skill("unicron:spec-writer")
 activate_skill("unicron:planner")
@@ -13,29 +13,29 @@ activate_skill("unicron:dispatcher")
 activate_skill("unicron:auditor")
 ```
 
-### Available Agents
+### 可用 Agents
 
 cto, solutions-architect, ux-designer, frontend-dev, backend-dev, mobile-dev, database-admin, qa-engineer, security-engineer, devops-sre, technical-writer, product-analyst, code-reviewer
 
-### Commands
+### 命令
 
-| Command | What it does |
+| 命令 | 功能 |
 |---|---|
-| `/unicron` | Start or resume the full SDLC workflow |
-| `/unicron:investigate` | Run the investigation loop |
-| `/unicron:spec` | View or generate the project spec |
-| `/unicron:plan` | View or generate the implementation plan |
-| `/unicron:dispatch` | Trigger next agent task dispatch |
-| `/unicron:status` | Show current phase and progress |
-| `/unicron:audit` | Run a standalone codebase health report |
-| `/unicron:agent <name>` | Invoke a specialist directly |
-| `/unicron:remember <note>` | Manually save a memory entry |
-| `/unicron:forget <topic>` | Find and delete matching memory entries |
-| `/unicron:memory` | Show all memory entries for this project + global |
+| `/unicron` | 开始或恢复完整的 SDLC 工作流 |
+| `/unicron:investigate` | 运行调查循环 |
+| `/unicron:spec` | 查看或生成项目规格说明 |
+| `/unicron:plan` | 查看或生成实施计划 |
+| `/unicron:dispatch` | 触发下一个 Agent 任务调度 |
+| `/unicron:status` | 显示当前阶段和进度 |
+| `/unicron:audit` | 运行独立的代码库健康报告 |
+| `/unicron:agent <name>` | 直接调用专家 |
+| `/unicron:remember <note>` | 手动保存记忆条目 |
+| `/unicron:forget <topic>` | 查找并删除匹配的记忆条目 |
+| `/unicron:memory` | 显示该项目及全局的所有记忆条目 |
 
-### Natural Language Triggers
+### 自然语言触发器
 
-- "Start unicron" → activates main unicron skill
-- "Run a unicron audit" → activates auditor skill
-- "Investigate this project with unicron" → activates investigate skill
-- "Write a spec with unicron" → activates spec-writer skill
+- "启动 unicron" → 激活主 unicron 技能
+- "运行 unicron 审计" → 激活 auditor 技能
+- "用 unicron 调查这个项目" → 激活 investigate 技能
+- "用 unicron 编写规格说明" → 激活 spec-writer 技能

@@ -3,113 +3,113 @@ name: spec-writer
 description: "Generates a 14-section spec from investigation context. Self-reviews for completeness, gets user approval, commits to git, then invokes the planner skill."
 ---
 
-# Unicron Spec Writer
+# Unicron 规格说明编写器
 
-You have completed the investigation. Now write the spec.
+你已完成调查。现在编写规格说明。
 
-## Output File
+## 输出文件
 
-Write to: `docs/unicron/spec.md`
+写入：`docs/unicron/spec.md`
 
-Create the `docs/unicron/` directory if it doesn't exist.
+如果 `docs/unicron/` 目录不存在，则创建它。
 
-## Spec Format
+## 规格说明格式
 
-Write ALL 14 sections. No section may contain "TBD", "TODO", or placeholder text.
+编写全部 14 个章节。任何章节都不得包含 "TBD"、"TODO" 或占位符文本。
 
 ```markdown
-# [Project Name] — Unicron Spec
-_Generated: YYYY-MM-DD | Status: Draft_
+# [项目名称] — Unicron 规格说明
+_生成日期：YYYY-MM-DD | 状态：草稿_
 
-## 1. Goals
-[1 paragraph: what this is, who it's for, what success looks like]
+## 1. 目标
+[1 段落：这是什么、面向谁、成功是什么样的]
 
-## 2. Users & Personas
-[Bullet list: each persona with their primary job-to-be-done]
+## 2. 用户与用户画像
+[项目符号列表：每个画像及其主要待完成工作]
 
-## 3. Functional Requirements
-[Numbered list. Each requirement is a testable statement starting with a verb.]
+## 3. 功能需求
+[编号列表。每个需求是一个以动词开头的可测试陈述。]
 
-## 4. Non-Functional Requirements
-[Performance, security, compliance, scalability — explicit numbers where possible]
+## 4. 非功能需求
+[性能、安全、合规、可扩展性 — 尽可能提供具体数字]
 
-## 5. Architecture
-[Pattern name, rationale, ASCII or Mermaid component diagram]
+## 5. 架构
+[模式名称、理由、ASCII 或 Mermaid 组件图]
 
-## 6. Design Patterns
-[Table: Pattern | Applied To | Rationale]
+## 6. 设计模式
+[表格：模式 | 应用于 | 理由]
 
-## 7. Data Models
-[Core entities, relationships, key fields. Mermaid ERD for anything non-trivial]
+## 7. 数据模型
+[核心实体、关系、关键字段。对于复杂的内容使用 Mermaid ERD]
 
-## 8. API Contracts
-[Key endpoints with method, path, request shape, response shape]
+## 8. API 契约
+[关键端点，包含方法、路径、请求结构、响应结构]
 
-## 9. Folder Structure
-[Directory tree with one-line comment per directory]
+## 9. 目录结构
+[目录树，每个目录附一行注释]
 
-## 10. Tech Stack
-[Table: Layer | Technology | Rationale]
+## 10. 技术栈
+[表格：层级 | 技术 | 理由]
 
-## 11. Integrations
-[Table: Integration | How it connects | Auth method]
+## 11. 集成
+[表格：集成 | 连接方式 | 认证方法]
 
-## 12. Constraints & Risks
-[Table: Item | Detail | Mitigation]
+## 12. 约束与风险
+[表格：条目 | 详情 | 缓解措施]
 
-## 13. Acceptance Criteria
-[Numbered, testable. Each maps to a Functional Requirement]
+## 13. 验收标准
+[编号，可测试。每条映射到一个功能需求]
 
-## 14. Out of Scope (v1)
-[Explicit list of what will NOT be built in this cycle]
+## 14. v1 范围外
+[明确列出本迭代中不会构建的内容]
 ```
 
-## Self-Review (before showing to user)
+## 自我审查（展示给用户之前）
 
-After writing, check:
-1. **Placeholder scan**: Any "TBD", "TODO", "fill in later"? Fix them.
-2. **Consistency**: Does the architecture in §5 match the tech stack in §10? Does the folder structure in §9 match the architecture in §5?
-3. **Completeness**: Are all functional requirements in §3 traceable to acceptance criteria in §13?
-4. **Scope**: Is §14 explicit enough? The implementation plan cannot be written without knowing what's out of scope.
+编写后检查：
+1. **占位符扫描**：是否有 "TBD"、"TODO"、"稍后填写"？修复它们。
+2. **一致性**：§5 中的架构是否与 §10 中的技术栈匹配？§9 中的目录结构是否与 §5 中的架构匹配？
+3. **完整性**：§3 中的所有功能需求是否都可追溯到 §13 中的验收标准？
+4. **范围**：§14 是否足够明确？没有明确的范围外内容，就无法编写实施计划。
 
-Fix issues inline. Then proceed.
+内联修复问题。然后继续。
 
-## Review Gate
+## 审查关卡
 
-After writing the spec, say:
+编写规格说明后，说：
 
-> "Spec written to `docs/unicron/spec.md`. Please review it — check especially:
-> - Section 5 (Architecture) matches your vision
-> - Section 14 (Out of Scope) correctly excludes what you don't need yet
-> - Section 13 (Acceptance Criteria) captures what done means for you
+> "规格说明已写入 `docs/unicron/spec.md`。请审查它 — 特别检查：
+> - 第 5 节（架构）是否符合你的愿景
+> - 第 14 节（范围外）是否正确排除了你暂时不需要的内容
+> - 第 13 节（验收标准）是否捕捉了你对"完成"的定义
 >
-> Reply with any changes, or say 'approved' to proceed to planning."
+> 请告知任何更改，或说"已批准"以继续规划。"
 
-Wait for explicit approval. Apply any changes and re-present if requested.
+等待明确批准。如有需要，应用更改并重新呈现。
 
-## On Approval
+## 批准后
 
-1. Commit the spec:
+1. 提交规格说明：
 ```bash
 git add docs/unicron/spec.md
 git commit -m "add: unicron project spec"
 ```
 
-2. Write decisions to memory. Invoke `memory-writer` three times:
+2. 将决策写入记忆。三次调用 `memory-writer`：
 
-**Tech stack decision:**
-- `content`: "Chose [tech stack from §10] for this project. Rationale: [one sentence from §10]."
-- `event`: `spec-approved`
-- `context`: `{ tags: ["tech-stack", "<primary language>", "<framework>"] }`
+**技术栈决策：**
+- `content`："为本项目选择了 [§10 中的技术栈]。理由：[§10 中的一句话]。"
+- `event`：`spec-approved`
+- `context`：`{ tags: ["tech-stack", "<主要语言>", "<框架>"] }`
 
-**Architecture decision:**
-- `content`: "Using [pattern from §5] architecture. Rationale: [one sentence from §5]."
-- `event`: `spec-approved`
-- `context`: `{ tags: ["architecture", "<pattern name>"] }`
+**架构决策：**
+- `content`："使用 [§5 中的模式] 架构。理由：[§5 中的一句话]。"
+- `event`：`spec-approved`
+- `context`：`{ tags: ["architecture", "<模式名称>"] }`
 
-**Key constraints:**
-- `content`: "Hard constraints for this project: [list from §4]."
-- `event`: `spec-approved`
-- `context`: `{ tags: ["constraints"] }`
+**关键约束：**
+- `content`："本项目的硬性约束：[§4 中的列表]。"
+- `event`：`spec-approved`
+- `context`：`{ tags: ["constraints"] }`
 
-3. Invoke the `planner` skill.
+3. 调用 `planner` 技能。
