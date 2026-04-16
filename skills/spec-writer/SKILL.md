@@ -95,4 +95,21 @@ git add docs/unicron/spec.md
 git commit -m "add: unicron project spec"
 ```
 
-2. Invoke the `planner` skill.
+2. Write decisions to memory. Invoke `memory-writer` three times:
+
+**Tech stack decision:**
+- `content`: "Chose [tech stack from §10] for this project. Rationale: [one sentence from §10]."
+- `event`: `spec-approved`
+- `context`: `{ tags: ["tech-stack", "<primary language>", "<framework>"] }`
+
+**Architecture decision:**
+- `content`: "Using [pattern from §5] architecture. Rationale: [one sentence from §5]."
+- `event`: `spec-approved`
+- `context`: `{ tags: ["architecture", "<pattern name>"] }`
+
+**Key constraints:**
+- `content`: "Hard constraints for this project: [list from §4]."
+- `event`: `spec-approved`
+- `context`: `{ tags: ["constraints"] }`
+
+3. Invoke the `planner` skill.
