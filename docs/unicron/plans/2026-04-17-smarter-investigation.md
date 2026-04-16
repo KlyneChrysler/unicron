@@ -1,3 +1,52 @@
+# Smarter Investigation Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Rewrite `skills/investigate/SKILL.md` to add domain classification from Q1, domain-specific adaptive Q2–Q5 question sets, gap-type confidence scoring, and a structured exit payload passed to spec-writer.
+
+**Architecture:** Single markdown file rewrite. Q1 classifies the domain (7 types); Q2–Q5 load the matching question set; gap-type tracking (missing/ambiguous/conflicting) drives follow-up questions in criticality order; exit produces a structured context block for spec-writer.
+
+**Tech Stack:** Markdown only. No code changes. Verification via grep + smoke test.
+
+---
+
+## File Map
+
+| Action | Path | What changes |
+|--------|------|-------------|
+| Modify | `skills/investigate/SKILL.md` | Full rewrite in Simplified Chinese |
+
+No other files change.
+
+---
+
+### Task 1: Rewrite `skills/investigate/SKILL.md`
+
+**Files:**
+- Modify: `skills/investigate/SKILL.md`
+
+This is the only task. Replace the entire file with the new smarter investigation skill in Simplified Chinese. All prose, headings, bullets, and table content in Chinese. YAML frontmatter keys, code block content, command names, file paths, and tech identifiers stay in English.
+
+- [ ] **Step 1: Create a new branch**
+
+```bash
+git checkout main
+git checkout -b feature/smarter-investigation
+```
+
+- [ ] **Step 2: Verify the current file content**
+
+```bash
+cat skills/investigate/SKILL.md | head -20
+```
+
+Expected: frontmatter with `name: investigate`, followed by Chinese content from the translation pass.
+
+- [ ] **Step 3: Write the new SKILL.md**
+
+Replace the entire contents of `skills/investigate/SKILL.md` with:
+
+```markdown
 ---
 name: investigate
 description: "Unicron 调查循环。对 Q1 答案进行领域分类，加载领域自适应问题集（Q2–Q5），通过间隙类型（缺失/模糊/冲突）对 6 个置信维度评分，所有维度达到 70% 后生成结构化退出载荷并移交 spec-writer。"
@@ -190,3 +239,94 @@ Q5 回答后，对 6 个维度评分并分类每个间隙。按关键性顺序�
 - **new-feature**：Q1 聚焦于具体功能，而非整个系统。询问它如何适配现有架构。
 - **bug-fix**：用"描述 Bug"、"预期行为是什么？"、"实际行为是什么？"替换 Q1–Q3。跳过置信度评分——直接用 Bug 修复规格格式调用 spec-writer。
 - **refactor**：聚焦于当前痛点、目标架构以及不能破坏的内容。
+```
+
+- [ ] **Step 4: Verify key sections exist**
+
+```bash
+grep -c "第一阶段" skills/investigate/SKILL.md
+grep -c "第二阶段" skills/investigate/SKILL.md
+grep -c "第三阶段" skills/investigate/SKILL.md
+grep -c "mobile-app" skills/investigate/SKILL.md
+grep -c "web-api" skills/investigate/SKILL.md
+grep -c "data-pipeline" skills/investigate/SKILL.md
+grep -c "cli-tool" skills/investigate/SKILL.md
+grep -c "ambiguous" skills/investigate/SKILL.md
+grep -c "conflicting" skills/investigate/SKILL.md
+grep -c "待解问题" skills/investigate/SKILL.md
+grep -c "memory-writer" skills/investigate/SKILL.md
+```
+
+Expected: each command prints `1` or higher (no zeroes).
+
+- [ ] **Step 5: Verify gap-type caps are present**
+
+```bash
+grep "60%" skills/investigate/SKILL.md
+grep "40%" skills/investigate/SKILL.md
+```
+
+Expected: both lines found — these are the ambiguous and conflicting caps from the confidence model table.
+
+- [ ] **Step 6: Run smoke test**
+
+```bash
+node core/installer.js --home "$(mktemp -d)" 2>&1 | grep "claude-code done"
+```
+
+Expected output contains: `claude-code done`
+
+Then verify the skill file is installed correctly by the installer:
+
+```bash
+TEMP="$(mktemp -d)"
+node core/installer.js --home "$TEMP" 2>&1
+grep -c "第一阶段" "$TEMP/.claude/skills/unicron/investigate/SKILL.md"
+```
+
+Expected: `1`
+
+- [ ] **Step 7: Commit**
+
+```bash
+git add skills/investigate/SKILL.md
+git commit -m "update: smarter investigation — domain classification, adaptive Q2–Q5, gap-type confidence, structured exit payload"
+```
+
+- [ ] **Step 8: Push branch**
+
+```bash
+git push -u origin feature/smarter-investigation
+```
+
+---
+
+### Task 2: Merge to main
+
+- [ ] **Step 1: Switch to main and merge**
+
+```bash
+git checkout main
+git merge feature/smarter-investigation --no-ff -m "merge: smarter investigation skill"
+```
+
+- [ ] **Step 2: Run full smoke test on main**
+
+```bash
+bash tests/smoke.sh
+```
+
+Expected: `=== All smoke tests passed ===`
+
+- [ ] **Step 3: Push main**
+
+```bash
+git push origin main
+```
+
+- [ ] **Step 4: Delete feature branch**
+
+```bash
+git branch -d feature/smarter-investigation
+git push origin --delete feature/smarter-investigation
+```
