@@ -3,101 +3,101 @@ name: investigate
 description: "Investigation loop for Unicron. Asks 5 minimum required questions, tracks confidence scores across 6 dimensions, shows live context panel after each answer, exits when all dimensions ≥ 70% and user confirms."
 ---
 
-# Unicron Investigation Loop
+# Unicron 调查循环
 
-Your job is to learn everything needed to write a complete spec. Ask one question at a time. After every answer, update and display the live context panel.
+你的工作是学习编写完整规格说明所需的一切信息。每次只提一个问题。每次回答后，更新并显示实时上下文面板。
 
-## Phase 1: Required Questions (always ask all 5)
+## 阶段 1：必答问题（始终全部提问，共 5 个）
 
-Ask these in order, one per message:
+按顺序提问，每条消息只问一个：
 
-- Q1: "What are you building? Describe it in 2–3 sentences — what it does and who it's for."
-- Q2: "Who are the users? (e.g. consumers, internal team, developers, businesses) — and roughly how many?"
-- Q3: "What's your tech stack, or do you have preferences? (e.g. React + Node, Python/Django, Swift, Flutter, or 'you choose')"
-- Q4: "What are your hard constraints? Think: deadline, budget, team size, compliance requirements (GDPR, HIPAA, SOC2), or scale targets."
-- Q5: "What does success look like in 3 months? Be specific — a number, a milestone, a capability."
+- Q1："你在构建什么？用 2–3 句话描述它的功能和目标用户。"
+- Q2："用户是谁？（例如：消费者、内部团队、开发者、企业）— 大概有多少人？"
+- Q3："你的技术栈是什么，或者你有偏好吗？（例如：React + Node、Python/Django、Swift、Flutter，或'由你决定'）"
+- Q4："你有哪些硬性约束？考虑：截止日期、预算、团队规模、合规要求（GDPR、HIPAA、SOC2）或规模目标。"
+- Q5："3 个月后成功是什么样的？请具体说明 — 一个数字、一个里程碑、一项能力。"
 
-## Phase 2: Confidence Scoring (adaptive)
+## 阶段 2：置信度评分（自适应）
 
-After Q5, compute a score (0–100%) for each of these 6 dimensions:
+Q5 结束后，对以下 6 个维度各计算一个评分（0–100%）：
 
-| Dimension | What you're measuring |
+| 维度 | 衡量内容 |
 |---|---|
-| Architecture clarity | Do you know the system's structure well enough to choose patterns? |
-| Data model clarity | Do you know the core entities and their relationships? |
-| Integration surface | Do you know what external services/APIs connect to this? |
-| Security & compliance | Do you know auth requirements and any compliance constraints? |
-| Scale requirements | Do you know expected load, users, data volume? |
-| Team & deployment | Do you know who's building this and how it gets deployed? |
+| 架构清晰度 | 你是否足够了解系统结构以选择合适的模式？ |
+| 数据模型清晰度 | 你是否了解核心实体及其关系？ |
+| 集成面 | 你是否知道哪些外部服务/API 与此连接？ |
+| 安全与合规 | 你是否了解认证要求和合规约束？ |
+| 规模要求 | 你是否知道预期的负载、用户数和数据量？ |
+| 团队与部署 | 你是否知道谁在构建以及如何部署？ |
 
-For any dimension below 70%, generate one targeted question and ask it. Continue until all dimensions ≥ 70%.
+对于任何低于 70% 的维度，生成一个有针对性的问题并提问。继续直到所有维度 ≥ 70%。
 
-## Preference Detection
+## 偏好检测
 
-After EVERY answer (Q1–Q5 and any follow-up questions), scan the answer for expressed preferences:
+在每次回答后（Q1–Q5 及任何后续问题），扫描回答中表达的偏好：
 
-**Signals to detect:**
-- "I always use X" / "I never use X"
-- "I prefer X" / "I like X"
-- "we always do X" / "we don't do X"
-- Strong opinions about tools, patterns, or process
+**检测信号：**
+- "我总是用 X" / "我从不用 X"
+- "我偏好 X" / "我喜欢 X"
+- "我们总是做 X" / "我们不做 X"
+- 对工具、模式或流程的强烈看法
 
-**When detected:**
-Invoke `memory-writer` with:
-- `content`: the expressed preference in one sentence
-- `event`: `preference-detected`
+**检测到时：**
+以以下参数调用 `memory-writer`：
+- `content`：用一句话表达的偏好
+- `event`：`preference-detected`
 
-Do this silently — do not interrupt the investigation flow to announce it.
+静默执行 — 不要打断调查流程来宣告此操作。
 
-**Examples:**
-- "I always use Tailwind for styling" → write: "User always uses Tailwind CSS for styling."
-- "we never use ORM, raw SQL only" → write: "User prefers raw SQL over ORMs."
-- "I like minimal approval gates" → write: "User prefers minimal approval gates — skip optional confirmation prompts."
+**示例：**
+- "我总是用 Tailwind 做样式" → 写入："用户总是使用 Tailwind CSS 进行样式设计。"
+- "我们从不用 ORM，只用原生 SQL" → 写入："用户偏好原生 SQL 而非 ORM。"
+- "我喜欢最少的审批关卡" → 写入："用户偏好最少的审批关卡 — 跳过可选的确认提示。"
 
-## Live Context Panel
+## 实时上下文面板
 
-After EVERY answer (including Q1–Q5), show this panel updated with what you know:
+每次回答后（包括 Q1–Q5），显示以下更新后的面板：
 
 ```
-📋 What I know so far:
-  Project:      [one-line description]
-  Users:        [who + how many]
-  Stack:        [technologies]
-  Constraints:  [deadline / budget / compliance]
-  Success:      [3-month success metric]
+📋 目前已知信息：
+  项目：      [一行描述]
+  用户：      [是谁 + 多少人]
+  技术栈：    [技术]
+  约束：      [截止日期 / 预算 / 合规]
+  成功标准：  [3 个月成功指标]
 
-  Confidence:
-    Architecture      [████████░░]  80%
-    Data model        [██████░░░░]  60%  ← asking next
-    Integrations      [████░░░░░░]  40%  ← need more
-    Security/Compliance [██████████] 100%
-    Scale             [███████░░░]  70%
-    Team/Deployment   [██████░░░░]  60%  ← need more
+  置信度：
+    架构          [████████░░]  80%
+    数据模型      [██████░░░░]  60%  ← 下一个提问
+    集成          [████░░░░░░]  40%  ← 需要更多信息
+    安全/合规     [██████████] 100%
+    规模          [███████░░░]  70%
+    团队/部署     [██████░░░░]  60%  ← 需要更多信息
 ```
 
-## Investigation Exit
+## 调查退出
 
-When all 6 dimensions reach 70%+, present a full understanding summary:
+当所有 6 个维度达到 70% 以上时，呈现完整的理解摘要：
 
-> "I think I have enough to write the spec. Here's my full understanding:
+> "我认为我已有足够信息来编写规格说明。以下是我的完整理解：
 >
-> **Project:** [description]
-> **Users:** [users]
-> **Stack:** [stack]
-> **Architecture approach:** [your recommendation]
-> **Key design patterns:** [patterns you'll use]
-> **Data models:** [core entities]
-> **Integrations:** [external services]
-> **Constraints:** [hard constraints]
-> **Success criteria:** [measurable goal]
+> **项目：** [描述]
+> **用户：** [用户]
+> **技术栈：** [技术栈]
+> **架构方案：** [你的建议]
+> **关键设计模式：** [你将使用的模式]
+> **数据模型：** [核心实体]
+> **集成：** [外部服务]
+> **约束：** [硬性约束]
+> **成功标准：** [可衡量目标]
 >
-> Does this look right? Any corrections before I write the spec?"
+> 这看起来对吗？在我编写规格说明之前有什么需要更正的吗？"
 
-Wait for confirmation. If the user requests changes, update your understanding and re-confirm. When confirmed, invoke the `spec-writer` skill.
+等待确认。如果用户要求更改，更新你的理解并重新确认。确认后，调用 `spec-writer` 技能。
 
-## Mode Variants
+## 模式变体
 
-If called with mode context from the main unicron skill:
-- **new-feature**: Focus Q1 on the specific feature, not the whole system. Ask about how it fits the existing architecture.
-- **bug-fix**: Replace Q1–Q3 with: "Describe the bug", "What's the expected behavior?", "What's the actual behavior?". Skip confidence scoring — go straight to spec-writer with a bug-fix spec format.
-- **refactor**: Focus on current pain points, target architecture, and what must not break.
+如果从主 unicron 技能传入模式上下文时调用：
+- **new-feature**：将 Q1 聚焦于特定功能，而非整个系统。询问它如何融入现有架构。
+- **bug-fix**：将 Q1–Q3 替换为："描述这个 Bug"、"预期行为是什么？"、"实际行为是什么？"。跳过置信度评分 — 直接以 Bug 修复规格格式调用 spec-writer。
+- **refactor**：聚焦于当前痛点、目标架构，以及什么是不能破坏的。

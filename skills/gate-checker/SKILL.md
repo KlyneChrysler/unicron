@@ -3,46 +3,46 @@ name: gate-checker
 description: "Phase gate evaluation. Verifies all tasks in the phase are complete, tests pass, and code-reviewer + security-engineer sign off before the next phase starts."
 ---
 
-# Unicron Phase Gate Checker
+# Unicron 阶段关卡检查器
 
-You are running the phase gate. All tasks must be complete, tests must pass, and mandatory sign-offs must be obtained before the next phase can start.
+你正在运行阶段关卡。在下一个阶段开始之前，所有任务必须完成、测试必须通过，并且必须获得强制签署确认。
 
-## Gate Checklist
+## 关卡检查清单
 
-Run each check in order. If any check fails, the gate is BLOCKED.
+按顺序运行每项检查。如果任何检查失败，关卡即为阻塞状态。
 
-### Check 1: Task completion
-- [ ] Every task in Phase N has all acceptance criteria checked
-- If any are unchecked: report which task and criterion. Gate = BLOCKED.
+### 检查 1：任务完成度
+- [ ] 阶段 N 中的每个任务都已勾选所有验收标准
+- 如果有未勾选的：报告是哪个任务和标准。关卡 = 阻塞。
 
-### Check 2: Test suite
-- [ ] Ask the user: "Please run `[project test command]` and share the output."
-- If tests fail: dispatch `qa-engineer` to fix them. Re-run gate after fix.
-- If tests pass: continue.
+### 检查 2：测试套件
+- [ ] 询问用户："请运行 `[项目测试命令]` 并分享输出。"
+- 如果测试失败：调度 `qa-engineer` 修复它们。修复后重新运行关卡。
+- 如果测试通过：继续。
 
-### Check 3: Code reviewer sign-off
-- [ ] Invoke `code-reviewer`: "Phase N gate review. Review all code changed in this phase for quality, patterns, and consistency."
-- If CRITICAL or HIGH findings: dispatch relevant specialist to fix. Re-run gate.
-- If only LOW/INFO findings: log them, proceed.
+### 检查 3：代码审查员签署确认
+- [ ] 调用 `code-reviewer`："阶段 N 关卡审查。审查本阶段中所有已更改代码的质量、模式和一致性。"
+- 如果有 CRITICAL 或 HIGH 发现：调度相关专家修复。重新运行关卡。
+- 如果只有 LOW/INFO 发现：记录它们，继续。
 
-### Check 4: Security sign-off (required if phase includes auth, data handling, or APIs)
-- [ ] Invoke `security-engineer`: "Phase N security gate. Review new endpoints, auth code, and data handling for OWASP issues."
-- If CRITICAL finding: BLOCKED — fix before proceeding.
-- If clean: continue.
+### 检查 4：安全签署确认（如果阶段包含认证、数据处理或 API，则为必须）
+- [ ] 调用 `security-engineer`："阶段 N 安全关卡。审查新端点、认证代码和数据处理，检查 OWASP 问题。"
+- 如果有 CRITICAL 发现：阻塞 — 继续之前修复。
+- 如果通过：继续。
 
-## Gate Results
+## 关卡结果
 
-**PASSED:**
-> "Phase N gate passed. All tasks complete, tests passing, reviewers signed off. Proceeding to Phase N+1."
+**通过：**
+> "阶段 N 关卡已通过。所有任务完成、测试通过、审查员已签署确认。继续进入阶段 N+1。"
 
-Invoke `memory-writer` with:
-- `content`: "Phase [N] gate passed. Agents involved: [list]. All acceptance criteria met. Test suite: passing. Notable issues: [summary or 'none']."
-- `event`: `gate-passed`
-- `context`: `{ phase: N, tags: ["phase-gate", "<primary tech tags from spec>"] }`
+以以下参数调用 `memory-writer`：
+- `content`："阶段 [N] 关卡已通过。涉及的 Agents：[列表]。所有验收标准已满足。测试套件：通过。值得注意的问题：[摘要或'无']。"
+- `event`：`gate-passed`
+- `context`：`{ phase: N, tags: ["phase-gate", "<规格说明中的主要技术标签>"] }`
 
-Invoke `dispatcher` to begin Phase N+1.
+调用 `dispatcher` 开始阶段 N+1。
 
-**BLOCKED:**
-> "Phase N gate BLOCKED. Reason: [specific failure]. Address this before I can proceed to Phase N+1."
+**阻塞：**
+> "阶段 N 关卡阻塞。原因：[具体失败内容]。在我继续进入阶段 N+1 之前请解决此问题。"
 
-Wait for user confirmation that the blocker is resolved, then re-run the gate.
+等待用户确认阻塞已解决，然后重新运行关卡。

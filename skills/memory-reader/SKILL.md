@@ -3,93 +3,93 @@ name: memory-reader
 description: "Loads global and project MEMORY.md indexes, filters entries by relevance to the current phase/task, and returns a structured context block indicating which memories to apply silently vs surface explicitly. Called at session start and before agent dispatch."
 ---
 
-# Unicron Memory Reader
+# Unicron 记忆读取器
 
-Load and surface relevant memory. Called at session start and before any agent dispatch.
+加载并呈现相关记忆。在会话开始时和任何 Agent 调度之前调用。
 
-## When invoked
+## 调用时机
 
-- `unicron` skill at session start (before any check or investigation)
-- `dispatcher` before assembling a mini-team for a task
+- 会话开始时调用 `unicron` 技能（在任何检查或调查之前）
+- `dispatcher` 在为任务组建迷你团队之前
 
-## Input
+## 输入
 
-You receive:
-- `phase`: current SDLC phase — one of: `investigating`, `speccing`, `planning`, `building`, `complete`
-- `task` (optional): current task title and description — provided before dispatch
-- `tags` (optional): specific tags to filter by
+你接收：
+- `phase`：当前 SDLC 阶段 — 以下之一：`investigating`、`speccing`、`planning`、`building`、`complete`
+- `task`（可选）：当前任务标题和描述 — 在调度前提供
+- `tags`（可选）：用于过滤的特定标签
 
-## Process
+## 流程
 
-### 1. Load indexes
+### 1. 加载索引
 
-Read `~/.unicron/memory/MEMORY.md` (global) — if it exists.
-Read `.unicron/memory/MEMORY.md` (project) — if it exists.
+读取 `~/.unicron/memory/MEMORY.md`（全局）— 如果存在。
+读取 `.unicron/memory/MEMORY.md`（项目）— 如果存在。
 
-Resolve `.unicron/memory/MEMORY.md` by:
-1. Check if the current working directory contains `.unicron/memory/MEMORY.md`
-2. If not, search parent directories up to the git root
-3. If no project root is found, skip the project index — do not error
+通过以下方式解析 `.unicron/memory/MEMORY.md`：
+1. 检查当前工作目录是否包含 `.unicron/memory/MEMORY.md`
+2. 如果没有，向上搜索父目录直到 git 根目录
+3. 如果找不到项目根目录，跳过项目索引 — 不报错
 
-If both indexes are missing or empty, return empty context silently. Do not mention memory to the user.
+如果两个索引都缺失或为空，静默返回空上下文。不要向用户提及记忆。
 
-### 2. Filter
+### 2. 过滤
 
-From both indexes, select entries whose tags overlap with:
-- The current `phase` value (e.g. tag `planning` matches planning phase)
-- Any keywords from `task` title/description (word-level match)
-- Any explicitly provided `tags`
+从两个索引中，选择标签与以下内容重叠的条目：
+- 当前 `phase` 值（例如标签 `planning` 匹配规划阶段）
+- `task` 标题/描述中的任何关键词（词级匹配）
+- 任何明确提供的 `tags`
 
-If no `tags` are provided and no `task` context exists (session start with no task), load all entries from both indexes.
+如果未提供 `tags` 且不存在 `task` 上下文（没有任务的会话开始），则从两个索引加载所有条目。
 
-### 3. Read selected files
+### 3. 读取选中的文件
 
-For each selected index entry, resolve the file path relative to the directory containing the MEMORY.md file (e.g. `decisions/auth-approach.md` resolves to `.unicron/memory/decisions/auth-approach.md`).
+对于每个选中的索引条目，相对于包含 MEMORY.md 文件的目录解析文件路径（例如 `decisions/auth-approach.md` 解析为 `.unicron/memory/decisions/auth-approach.md`）。
 
-Read the full file content of each selected entry.
+读取每个选中条目的完整文件内容。
 
-### 4. Decide surfacing
+### 4. 决定呈现方式
 
-For each entry, check its `type` field in the frontmatter:
+对于每个条目，检查其前置数据中的 `type` 字段：
 
-| type | surfacing | action |
+| 类型 | 呈现方式 | 操作 |
 |------|-----------|--------|
-| `preference` | Silent | Add summary to `apply_silently` |
-| `decision` | Explicit | Add to `confirm_with_user` with a one-line prompt |
-| `outcome` | Silent | Add summary to `inform_dispatch` |
+| `preference` | 静默 | 添加摘要到 `apply_silently` |
+| `decision` | 明确 | 添加到 `confirm_with_user`，附一行提示 |
+| `outcome` | 静默 | 添加摘要到 `inform_dispatch` |
 
-Additionally: if any entry's content contradicts the current spec or plan (a direct conflict), add it to `flag_conflict` regardless of type.
+此外：如果任何条目的内容与当前规格说明或计划相矛盾（直接冲突），无论类型如何，都将其添加到 `flag_conflict`。
 
-Set `confidence` level for conflict detection:
-- Flag a conflict only when the contradiction is clear and direct, not speculative
-- Example of clear conflict: memory says "no mobile support" + current spec has iOS section
-- Example of non-conflict: memory says "prefer Postgres" + current spec doesn't mention a database yet
+为冲突检测设置 `confidence` 级别：
+- 仅在矛盾清晰且直接时标记冲突，而非推测性的
+- 明确冲突示例：记忆说"不支持移动端" + 当前规格说明有 iOS 章节
+- 非冲突示例：记忆说"偏好 Postgres" + 当前规格说明尚未提到数据库
 
-### 5. Return memory context block
+### 5. 返回记忆上下文块
 
-Output exactly this structure (omit empty lists):
+精确输出以下结构（省略空列表）：
 
 ```
 MEMORY CONTEXT:
 apply_silently:
-  - [preference summary — one sentence]
+  - [偏好摘要 — 一句话]
 confirm_with_user:
-  - memory: [decision summary — one sentence]
-    prompt: "Last time you chose X — apply the same here?"
+  - memory: [决策摘要 — 一句话]
+    prompt: "上次你选择了 X — 在这里也应用同样的选择吗？"
 inform_dispatch:
-  - [outcome summary — one sentence relevant to current task]
+  - [与当前任务相关的结果摘要 — 一句话]
 flag_conflict:
-  - memory: [conflicting entry summary]
-    conflict: "[what contradicts what]"
+  - memory: [冲突条目摘要]
+    conflict: "[什么与什么相矛盾]"
 ```
 
-If all lists are empty: return nothing. Do not output "no relevant memories found" or any acknowledgment.
+如果所有列表都为空：不返回任何内容。不要输出"未找到相关记忆"或任何确认信息。
 
-## Rules
+## 规则
 
-- Process `flag_conflict` entries first — surface conflicts before all other memory
-- Surface `confirm_with_user` entries one at a time — never batch multiple confirmation prompts
-- `apply_silently` entries adjust behavior with no user-visible output
-- `inform_dispatch` entries go into the CTO context block, not shown directly to the user
-- If both indexes are empty or missing: return nothing silently
-- If a file referenced in the index does not exist on disk: skip it silently, do not error
+- 优先处理 `flag_conflict` 条目 — 在所有其他记忆之前呈现冲突
+- 一次呈现一个 `confirm_with_user` 条目 — 永远不要批量显示多个确认提示
+- `apply_silently` 条目调整行为，不向用户显示任何输出
+- `inform_dispatch` 条目进入 CTO 上下文块，不直接向用户显示
+- 如果两个索引都为空或缺失：静默返回空内容
+- 如果索引中引用的文件在磁盘上不存在：静默跳过它，不报错

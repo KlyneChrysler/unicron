@@ -1,42 +1,42 @@
-## Unicron — Full SDLC AI Agent System
+## Unicron — 完整 SDLC AI Agent 系统
 
-Unicron is installed. It provides a complete IT department of 13 AI agents for the full software development lifecycle.
+Unicron 已安装。它为完整的软件开发生命周期提供由 13 个 AI Agent 组成的完整 IT 部门。
 
-### Commands
+### 命令
 
-| Command | What it does |
+| 命令 | 功能 |
 |---|---|
-| `/unicron` | Start or resume the full SDLC workflow |
-| `/unicron:investigate` | Run the investigation loop |
-| `/unicron:spec` | View or generate the project spec |
-| `/unicron:plan` | View or generate the implementation plan |
-| `/unicron:dispatch` | Trigger next agent task dispatch |
-| `/unicron:status` | Show current phase and progress |
-| `/unicron:audit` | Run a standalone codebase health report |
-| `/unicron:agent <name>` | Invoke a specialist directly |
-| `/unicron:remember <note>` | Manually save a memory entry |
-| `/unicron:forget <topic>` | Find and delete matching memory entries |
-| `/unicron:memory` | Show all memory entries for this project + global |
+| `/unicron` | 开始或恢复完整的 SDLC 工作流 |
+| `/unicron:investigate` | 运行调查循环 |
+| `/unicron:spec` | 查看或生成项目规格说明 |
+| `/unicron:plan` | 查看或生成实施计划 |
+| `/unicron:dispatch` | 触发下一个 Agent 任务调度 |
+| `/unicron:status` | 显示当前阶段和进度 |
+| `/unicron:audit` | 运行独立的代码库健康报告 |
+| `/unicron:agent <name>` | 直接调用专家 |
+| `/unicron:remember <note>` | 手动保存记忆条目 |
+| `/unicron:forget <topic>` | 查找并删除匹配的记忆条目 |
+| `/unicron:memory` | 显示该项目及全局的所有记忆条目 |
 
-### Memory
+### 记忆
 
-Global preferences: `~/.unicron/memory/`
-Project decisions + outcomes: `.unicron/memory/`
+全局偏好：`~/.unicron/memory/`
+项目决策 + 结果：`.unicron/memory/`
 
-### Available Agents
+### 可用 Agents
 
 cto, solutions-architect, ux-designer, frontend-dev, backend-dev, mobile-dev, database-admin, qa-engineer, security-engineer, devops-sre, technical-writer, product-analyst, code-reviewer
 
-### Skill Invocation (Claude Code)
+### 技能调用（Claude Code）
 
 ```
-Skill({ skill: "unicron" })                    // main entry point
-Skill({ skill: "unicron:investigate" })         // investigation loop
-Skill({ skill: "unicron:spec-writer" })         // spec generation
-Skill({ skill: "unicron:planner" })             // plan decomposition
-Skill({ skill: "unicron:dispatcher" })          // agent dispatch
-Skill({ skill: "unicron:gate-checker" })        // phase gate
-Skill({ skill: "unicron:auditor" })             // health scan
+Skill({ skill: "unicron" })                    // 主入口点
+Skill({ skill: "unicron:investigate" })         // 调查循环
+Skill({ skill: "unicron:spec-writer" })         // 规格说明生成
+Skill({ skill: "unicron:planner" })             // 计划分解
+Skill({ skill: "unicron:dispatcher" })          // Agent 调度
+Skill({ skill: "unicron:gate-checker" })        // 阶段关卡
+Skill({ skill: "unicron:auditor" })             // 健康扫描
 ```
 
-Skills are loaded from `~/.claude/skills/unicron/`. Agents are loaded from `~/.claude/agents/`.
+技能从 `~/.claude/skills/unicron/` 加载。Agents 从 `~/.claude/agents/` 加载。

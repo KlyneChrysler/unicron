@@ -3,80 +3,80 @@ name: planner
 description: "Reads the approved spec and decomposes it into a phased implementation plan with tasks, agent assignments, dependencies, and acceptance criteria. Gets user approval before dispatching."
 ---
 
-# Unicron Planner
+# Unicron 规划器
 
-Read `docs/unicron/spec.md`. Decompose it into a phased implementation plan.
+读取 `docs/unicron/spec.md`。将其分解为分阶段的实施计划。
 
-## Output File
+## 输出文件
 
-Write to: `docs/unicron/plan.md`
+写入：`docs/unicron/plan.md`
 
-## Decomposition Rules
+## 分解规则
 
-| Rule | Detail |
+| 规则 | 详情 |
 |---|---|
-| **Max task size** | One task fits in a single agent context window (~2000 lines of code max) |
-| **Vertical slices** | Each task delivers a working, testable slice — not a horizontal layer |
-| **Dependencies explicit** | Every task declares `depends_on: [task-id, ...]` |
-| **Acceptance criteria** | Every task has ≥ 1 concrete, checkable done condition |
-| **Agent assignment** | Every task names the specialist(s) from the registry |
+| **最大任务规模** | 一个任务适合单个 Agent 上下文窗口（最多约 2000 行代码） |
+| **垂直切片** | 每个任务交付一个可工作、可测试的切片 — 而非水平层 |
+| **显式依赖关系** | 每个任务声明 `depends_on: [task-id, ...]` |
+| **验收标准** | 每个任务至少有 1 个具体、可检查的完成条件 |
+| **Agent 分配** | 每个任务命名注册表中的专家 |
 
-## Phase Structure
+## 阶段结构
 
-Organize tasks into phases. Every project has at minimum:
+将任务组织成阶段。每个项目至少包含：
 
-- **Phase 1: Foundation** — scaffolding, database, CI, auth skeleton
-- **Phase 2: Core Features** — the main functional requirements
-- **Phase 3: Integration & Polish** — third-party integrations, UX refinement
-- **Phase 4: Hardening** — security review, performance, test coverage, docs
+- **阶段 1：基础** — 脚手架、数据库、CI、认证骨架
+- **阶段 2：核心功能** — 主要功能需求
+- **阶段 3：集成与打磨** — 第三方集成、UX 精化
+- **阶段 4：加固** — 安全审查、性能、测试覆盖率、文档
 
-## Plan Format
+## 计划格式
 
 ```markdown
-# [Project Name] — Implementation Plan
-_Spec: docs/unicron/spec.md | Generated: YYYY-MM-DD | Status: Active_
+# [项目名称] — 实施计划
+_规格说明：docs/unicron/spec.md | 生成日期：YYYY-MM-DD | 状态：进行中_
 
-## Phase 1: Foundation
+## 阶段 1：基础
 
-### Task 1.1 — [Title]
-**Agents:** [agent names from registry]
-**Depends on:** none
-**Description:** [what this delivers]
-**Steps:**
-- [ ] [specific step]
-**Acceptance criteria:**
-- [ ] [testable condition]
+### 任务 1.1 — [标题]
+**Agents：** [注册表中的 Agent 名称]
+**依赖于：** 无
+**描述：** [此任务交付什么]
+**步骤：**
+- [ ] [具体步骤]
+**验收标准：**
+- [ ] [可测试条件]
 
-## Phase 1 Gate
-- [ ] All Phase 1 tasks complete
-- [ ] Tests passing (`[test command]`)
-- [ ] code-reviewer signed off
-- [ ] security-engineer signed off (if auth/data in phase)
+## 阶段 1 关卡
+- [ ] 阶段 1 所有任务完成
+- [ ] 测试通过（`[测试命令]`）
+- [ ] code-reviewer 签署确认
+- [ ] security-engineer 签署确认（如果阶段包含认证/数据）
 ```
 
-## Agent Selection Guide
+## Agent 选择指南
 
-| Task type | Agents to assign |
+| 任务类型 | 分配的 Agents |
 |---|---|
-| New UI screen | ux-designer → frontend-dev → qa-engineer |
-| New API endpoint | backend-dev + security-engineer → qa-engineer |
-| Database schema | database-admin → backend-dev |
-| Auth system | solutions-architect → backend-dev + security-engineer → qa-engineer |
-| Deployment pipeline | devops-sre → security-engineer |
-| New documentation | technical-writer |
-| Any completed feature | code-reviewer (always last) |
+| 新 UI 页面 | ux-designer → frontend-dev → qa-engineer |
+| 新 API 端点 | backend-dev + security-engineer → qa-engineer |
+| 数据库 Schema | database-admin → backend-dev |
+| 认证系统 | solutions-architect → backend-dev + security-engineer → qa-engineer |
+| 部署流水线 | devops-sre → security-engineer |
+| 新文档 | technical-writer |
+| 任何已完成的功能 | code-reviewer（始终最后） |
 
-## Review Gate
+## 审查关卡
 
-After writing the plan, say:
+编写计划后，说：
 
-> "Plan written to `docs/unicron/plan.md`. Please review:
-> - Are the phases in the right order?
-> - Is any task too large (should be split)?
-> - Are the agent assignments correct?
+> "计划已写入 `docs/unicron/plan.md`。请审查：
+> - 阶段顺序是否正确？
+> - 是否有任务过大（需要拆分）？
+> - Agent 分配是否正确？
 >
-> Reply with changes, or say 'approved' to begin building."
+> 请告知更改，或说"已批准"以开始构建。"
 
-On approval:
-1. Commit: `git add docs/unicron/plan.md && git commit -m "add: unicron implementation plan"`
-2. Invoke the `dispatcher` skill.
+批准后：
+1. 提交：`git add docs/unicron/plan.md && git commit -m "add: unicron implementation plan"`
+2. 调用 `dispatcher` 技能。
