@@ -106,6 +106,8 @@ agents:
     platforms: [claude-code, gemini, copilot, codex]
     skill_file: agents/code-reviewer.md
 
+  # Note: memory skills use `skills/<name>/SKILL.md` paths (installed to ~/.claude/skills/unicron/<name>/SKILL.md)
+  # while agent files use `agents/<name>.md` paths (installed to ~/.claude/agents/<name>.md)
   memory-writer:
     description: "Classifies and writes persistent memory entries (decisions, outcomes, preferences) to the correct scope. Updates the MEMORY.md index."
     capabilities: [memory-write, classification, indexing]

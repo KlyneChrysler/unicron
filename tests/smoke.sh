@@ -51,7 +51,7 @@ grep -q "<!-- unicron-start -->" "$TEMP_HOME/.claude/CLAUDE.md" \
 	|| fail "skills/unicron/ directory not found"
 
 # 7. each SKILL.md present
-SKILLS=(unicron investigate spec-writer planner dispatcher gate-checker auditor)
+SKILLS=(unicron investigate spec-writer planner dispatcher gate-checker auditor memory-writer memory-reader)
 for skill in "${SKILLS[@]}"; do
 	[ -f "$TEMP_HOME/.claude/skills/unicron/$skill/SKILL.md" ] \
 		&& pass "skills/unicron/$skill/SKILL.md exists" \
