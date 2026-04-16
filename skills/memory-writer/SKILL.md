@@ -20,6 +20,7 @@ Write a persistent memory entry. Called after key events or by the user manually
 You receive:
 - `content`: the information to remember
 - `event`: what triggered this — one of: `spec-approved`, `task-complete`, `gate-passed`, `preference-detected`, `manual`
+  If `event` is not one of the allowed values, error: 'Unknown event type: [event]. Allowed: spec-approved, task-complete, gate-passed, preference-detected, manual.'
 - `context` (optional): project name, phase number, agent name (for outcomes)
 
 ## Process
@@ -37,13 +38,18 @@ Determine the memory type from `content` and `event`:
 - `decision` → per-project: `.unicron/memory/decisions/`
 - `outcome` → per-project: `.unicron/memory/outcomes/`
 
-Create the directory if it doesn't exist.
+Create all parent directories recursively (equivalent to `mkdir -p`) if they don't exist.
+
+For project-scoped entries, resolve `.unicron/memory/` by:
+1. Check if the current working directory contains `.unicron/memory/`
+2. If not, search parent directories up to the git root
+3. If no project root is found, error: "Cannot determine project root. Run from inside a project directory."
 
 ### 3. Generate filename
 
 Derive a kebab-case filename (max 40 chars) from the topic in `content`.
 For outcomes, append the date: `agent-qa-engineer-2026-04-17.md`
-If the file already exists, append `-2`, `-3`, etc.
+If the file already exists, append `-2`, `-3`, etc., incrementing until a non-existent filename is found. Maximum 99 versions; if exceeded, error: 'Too many versions of this entry. Use a more specific filename.'
 
 ### 4. Write the memory file
 
@@ -60,6 +66,8 @@ tags: [tag1, tag2, tag3]
 <body>
 ```
 
+Set `confidence` based on certainty of the information: `high` if explicit/direct (user said it clearly), `medium` if inferred from context, `low` if speculative.
+
 **Body rules:**
 - `preference`: 2–4 sentences in second person. "User prefers X because Y. Apply this by Z."
 - `decision`: 2–4 sentences with rationale. "Chose X over Y because Z. This affects [areas]."
@@ -68,6 +76,7 @@ tags: [tag1, tag2, tag3]
 **Tags rules:**
 - 2–5 specific lowercase keywords (e.g. `[database, postgresql, orm]`)
 - Used by memory-reader to filter relevant entries — be specific
+- Good tags: `[authentication, oauth2, jwt]`. Bad tags: `[project, important, general]`.
 
 ### 5. Update MEMORY.md index
 
@@ -80,7 +89,7 @@ At the scope root (`~/.unicron/memory/MEMORY.md` or `.unicron/memory/MEMORY.md`)
   ```
   - [Title](relative/path/to/file.md) — one-line hook describing the memory
   ```
-- Never duplicate an existing entry — check if the path already exists in the index first
+- Never duplicate an existing entry — if the path already appears in the index, skip adding it and exit successfully
 
 ### 6. Confirm (manual writes only)
 
