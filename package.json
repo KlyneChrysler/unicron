@@ -1,0 +1,11 @@
+{
+  "name": "unicron",
+  "version": "1.0.0",
+  "description": "Full SDLC AI agent system — installs on Claude Code, Gemini CLI, Copilot, and Codex",
+  "type": "module",
+  "bin": { "unicron": "./core/installer.js" },
+  "scripts": { "test": "node --experimental-vm-modules node_modules/.bin/jest" },
+  "keywords": ["ai", "agents", "sdlc", "claude", "gemini"],
+  "license": "MIT",
+  "devDependencies": { "jest": "^29.0.0" }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "unicron",
+  "description": "Full SDLC AI agent system: investigate → spec → plan → build with a 13-agent IT department",
+  "version": "1.0.0",
+  "license": "MIT",
+  "keywords": ["sdlc", "agents", "architecture", "tdd", "full-stack"]
+}
