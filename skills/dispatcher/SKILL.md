@@ -39,6 +39,12 @@ Mini-team:
 
 ### Step 3: Dispatch agents
 
+Before dispatching, invoke `memory-reader` with:
+- `phase`: current phase
+- `task`: current task title and description
+
+Add `inform_dispatch` entries from the memory context to the agent context block.
+
 For each agent in order, invoke their skill file. Pass this context block:
 
 ```
@@ -50,6 +56,7 @@ Current task: [task id, title, description, acceptance criteria]
 Prior agent outputs: [outputs from upstream agents on this task]
 Platform: [current platform name]
 Your role: [agent name and description from registry]
+Memory context: [inform_dispatch entries from memory-reader — agent outcomes relevant to this task]
 ====================
 ```
 
@@ -60,7 +67,10 @@ After each agent completes:
 - If NO: re-dispatch the same agent with the unmet criterion highlighted
 - If YES: mark the criterion checked
 
-When all criteria for the task are met, mark the task complete.
+When all criteria for the task are met, mark the task complete. Then invoke `memory-writer` with:
+- `content`: "[Agent name] completed [task title]. Approach: [one-sentence summary]. Result: all acceptance criteria met. Notes: [any issues or 'none']."
+- `event`: `task-complete`
+- `context`: `{ agent: "<agent name>", phase: "<current phase>", tags: ["<task domain tags>"] }`
 
 ### Step 5: Show progress
 
