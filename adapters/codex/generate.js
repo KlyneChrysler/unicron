@@ -32,4 +32,5 @@ export async function generate(unicronRoot, baseDir) {
   const targetPath = join(baseDir, 'AGENTS.md');
   injectIntoFile(targetPath, injection);
   console.log(`  Injected unicron context into ${targetPath}`);
+  console.log('  Note: Codex receives inline agent context (no file-based agents for this platform).');
 }

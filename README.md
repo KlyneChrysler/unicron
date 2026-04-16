@@ -126,12 +126,12 @@ Complete
 
 ## Supported Platforms
 
-| Platform | Detection | Integration |
-|----------|-----------|-------------|
-| Claude Code | `~/.claude/` exists | Copies skills + agents to `~/.claude/`; injects unicron context block into `CLAUDE.md` |
-| Gemini CLI | `~/.gemini/` exists | Copies skills + agents to `~/.gemini/`; injects context into Gemini system prompt config |
-| GitHub Copilot | `.github/copilot-instructions.md` exists | Appends unicron agent instructions to `copilot-instructions.md` |
-| OpenAI Codex | `AGENTS.md` exists in home | Appends unicron agent manifest to `AGENTS.md` |
+| Platform | Detection | Integration | Agent files |
+|----------|-----------|-------------|-------------|
+| Claude Code | `~/.claude/` exists | Copies skills + agents to `~/.claude/`; injects context block into `CLAUDE.md` | Full file-based agents in `~/.claude/agents/` |
+| Gemini CLI | `~/.gemini/` exists | Copies skills + agents to `~/.gemini/`; injects context into `GEMINI.md` | Full file-based agents in `~/.gemini/agents/` |
+| GitHub Copilot | `.github/copilot-instructions.md` exists | Injects inline agent roster into `copilot-instructions.md` | Inline context only (no file-based agents) |
+| OpenAI Codex | `AGENTS.md` exists in home | Injects inline agent manifest into `AGENTS.md` | Inline context only (no file-based agents) |
 
 ---
 
