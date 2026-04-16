@@ -23,6 +23,15 @@ export function detectPlatforms(baseDir = homedir()) {
 	return detected;
 }
 
+export function initMemoryDirs(baseDir) {
+	const memoryDir = join(baseDir, '.unicron', 'memory');
+	mkdirSync(join(memoryDir, 'preferences'), { recursive: true });
+	const indexPath = join(memoryDir, 'MEMORY.md');
+	if (!existsSync(indexPath)) {
+		writeFileSync(indexPath, '# Unicron Memory Index\n');
+	}
+}
+
 export function writeConfig(platforms, baseDir) {
 	const configDir = join(baseDir, '.unicron');
 	mkdirSync(configDir, { recursive: true });
@@ -79,5 +88,6 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	}
 
 	writeConfig(platforms, targetHome);
+	initMemoryDirs(targetHome);
 	console.log('\nUnicron installed. Run /unicron to get started.');
 }

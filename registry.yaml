@@ -105,3 +105,19 @@ agents:
     works_with: [all]
     platforms: [claude-code, gemini, copilot, codex]
     skill_file: agents/code-reviewer.md
+
+  memory-writer:
+    description: "Classifies and writes persistent memory entries (decisions, outcomes, preferences) to the correct scope. Updates the MEMORY.md index."
+    capabilities: [memory-write, classification, indexing]
+    triggers: [spec-approved, task-complete, gate-passed, preference-detected, manual-remember]
+    works_with: [cto, spec-writer, dispatcher, gate-checker]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: skills/memory-writer/SKILL.md
+
+  memory-reader:
+    description: "Loads global and project memory indexes, filters by relevance, and returns a structured context block for silent application or explicit surfacing."
+    capabilities: [memory-read, relevance-filtering, context-injection]
+    triggers: [session-start, pre-dispatch]
+    works_with: [cto, dispatcher]
+    platforms: [claude-code, gemini, copilot, codex]
+    skill_file: skills/memory-reader/SKILL.md

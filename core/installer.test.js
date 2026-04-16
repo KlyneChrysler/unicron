@@ -1,5 +1,5 @@
-import { detectPlatforms, PLATFORMS, writeConfig } from './installer.js';
-import { mkdtempSync, writeFileSync, mkdirSync, readFileSync } from 'fs';
+import { detectPlatforms, PLATFORMS, writeConfig, initMemoryDirs } from './installer.js';
+import { mkdtempSync, writeFileSync, mkdirSync, readFileSync, existsSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
@@ -55,5 +55,32 @@ describe('writeConfig', () => {
 		expect(config).toContain('claude-code');
 		expect(config).toContain('gemini');
 		expect(config).toContain('status: not-started');
+	});
+});
+
+describe('initMemoryDirs', () => {
+	test('creates ~/.unicron/memory/preferences/ directory', () => {
+		const home = makeTempDir();
+		initMemoryDirs(home);
+		expect(existsSync(join(home, '.unicron', 'memory', 'preferences'))).toBe(true);
+	});
+
+	test('creates ~/.unicron/memory/MEMORY.md index file', () => {
+		const home = makeTempDir();
+		initMemoryDirs(home);
+		expect(existsSync(join(home, '.unicron', 'memory', 'MEMORY.md'))).toBe(true);
+	});
+
+	test('MEMORY.md contains the index header', () => {
+		const home = makeTempDir();
+		initMemoryDirs(home);
+		const content = readFileSync(join(home, '.unicron', 'memory', 'MEMORY.md'), 'utf8');
+		expect(content).toContain('# Unicron Memory Index');
+	});
+
+	test('is idempotent — safe to call twice without error', () => {
+		const home = makeTempDir();
+		initMemoryDirs(home);
+		expect(() => initMemoryDirs(home)).not.toThrow();
 	});
 });
