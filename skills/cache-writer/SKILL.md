@@ -15,7 +15,7 @@ description: "Write-only hot cache appender. Called by dispatcher after each age
 - `outcome`：`success` | `failure` | `retry`
 - `failure_type`：`wrong_output` | `incomplete` | `quality` | `blocked` | `—`（成功时使用 `—`）
 - `retry_count`：此 Agent 在此任务上的重试次数（首次成功为 0）
-- `signals_matched`：来自 CTO 第一阶段内容分析的信号列表
+- `signals_matched`：来自 CTO 第一阶段内容分析的信号列表（如未提供则写 `[]`）
 - `injections_fired`：步骤 4b 中注入的 Agent 列表，或 `none`
 
 ## 流程
@@ -27,8 +27,10 @@ description: "Write-only hot cache appender. Called by dispatcher after each age
 
 检查 `.unicron/cache/hot.md` 是否存在：
 - 如果不存在：创建文件，写入以下标题：
+  ```
   # Unicron Hot Cache
   _Session started: YYYY-MM-DD_
+  ```
   其中 `YYYY-MM-DD` 为今天的日期。
 
 ### 2. 追加条目
@@ -50,6 +52,6 @@ description: "Write-only hot cache appender. Called by dispatcher after each age
 ## 规则
 
 - **只追加，不覆盖** — 永远不要修改现有条目
-- **缓存不可写时静默失败** — 如果文件写入失败，记录一行警告并退出，不阻塞调度器
+- **缓存不可写时静默失败** — 如果文件写入失败，向对话输出一行警告并退出，不阻塞调度器
 - **不调用 memory-writer** — 晋升是 pattern-detector 的工作
 - **不分析条目** — 只写入，其余留给 pattern-detector
