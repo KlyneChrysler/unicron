@@ -17,9 +17,9 @@ description: "Phase gate pattern analysis. Reads hot cache and historical outcom
 ### 1. 加载数据
 
 读取 `.unicron/cache/hot.md`：
-- 如果文件不存在，或仅包含标题行（无 `##` 条目）：跳至步骤 5，退出后将控制权返回给 gate-checker。不报错。
+- 如果文件不存在，或仅包含标题行（无 `##` 条目）：跳至步骤 6（返回），将控制权交还 gate-checker。不报错，不清除缓存。
 
-读取 `.unicron/memory/outcomes/` 中标签包含当前阶段或 `pattern-dismissed` 的文件（如有）。
+读取 `.unicron/memory/outcomes/` 中标签包含当前阶段或 `pattern-dismissed` 的文件；若无匹配文件则视为空集，继续执行。
 
 ### 2. 检测模式
 
@@ -56,7 +56,15 @@ description: "Phase gate pattern analysis. Reads hot cache and historical outcom
 然后**逐一**呈现每个模式（等待用户响应后再显示下一个）：
 
 ```
-[failure_pattern] [agent] x [count] [failure_type] failures on [signal] tasks
+[failure_pattern] [agent] x [count] [failure_type] failures
+  → Suggested fix: [具体的一行建议 — 引用受影响的 agent .md 文件和章节]
+  → Apply? (yes / skip / show diff)
+
+[routing_pattern] [agent] injected x [count] times on [signal] tasks
+  → Suggested fix: [具体的一行建议 — 引用受影响的 agent .md 文件和章节]
+  → Apply? (yes / skip / show diff)
+
+[quality_pattern] [agent] x [count] retries across tasks
   → Suggested fix: [具体的一行建议 — 引用受影响的 agent .md 文件和章节]
   → Apply? (yes / skip / show diff)
 ```
@@ -65,7 +73,7 @@ description: "Phase gate pattern analysis. Reads hot cache and historical outcom
 
 - **yes** → 应用补丁（见补丁规则），提交，然后呈现下一个模式
 - **skip** → 调用 `memory-writer` 记录已跳过的模式：
-  - `content`："已跳过模式：[模式类型] — [agent] x [count] 次，阶段 [N]。dismissed: true。"
+  - `content`："dismissed: true. 已跳过模式：[模式类型] — [agent] x [count] 次，阶段 [N]。"
   - `event`：`task-complete`
   - `context`：`{ agent: "<agent>", phase: "<N>", tags: ["pattern-dismissed", "<signal>"] }`
   然后呈现下一个模式
