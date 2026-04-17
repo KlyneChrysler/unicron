@@ -22,23 +22,36 @@ description: "Unicron CTO orchestrator. Reads spec + plan, assembles specialist 
 
 ### 第一阶段：内容分析
 
-读取任务的标题、描述、验收标准和文件列表。独立应用所有匹配信号：
+读取任务的标题、描述、验收标准和文件列表。提取任务信号（如 `api-feature`、`new-model`、`auth-logic`、`ui-change`）。
 
-| 任务内容中的信号 | 隐含的 Agent |
-|---|---|
-| 认证、登录、JWT、会话、OAuth、权限 | `security-engineer` |
-| Schema、迁移、模型、表、索引、查询 | `database-admin` |
-| UI、组件、页面、表单、布局、CSS | `ux-designer` → `frontend-dev` |
-| API 端点、路由、REST、GraphQL、webhook | `backend-dev` + `security-engineer` |
-| Docker、CI、部署、流水线、基础设施、环境变量 | `devops-sre` |
-| 阶段中的第一个任务，或架构模式变更 | `solutions-architect` |
-| 任何已完成的任务 | `code-reviewer`（始终最后） |
+**步骤 1：调用注册表读取器**
 
-多个信号独立触发。同时包含认证和 Schema 信号的任务同时获得 `security-engineer` 和 `database-admin`，无论计划的 `Agents：` 字段列出了什么。
+以提取的信号列表调用 `registry-reader`：
+- 返回已匹配 Agent 列表，含并行标记
+- 若返回错误（`registry.yaml` 不可读）→ 跳至步骤 2，完全使用覆盖表
+- 将 `未匹配信号` 列表记录在调度报告中
+
+**步骤 2：应用覆盖表**
+
+在注册表匹配结果之上叠加以下覆盖规则。覆盖规则优先于注册表匹配：
+
+| 信号 | 覆盖规则 | 原因 |
+|---|---|---|
+| `api-endpoint` | 强制同时包含 `backend-dev` + `security-engineer`（并行） | 两者始终一起出现，注册表触发器无法单独表达此配对 |
+| `pii-data` | 立即强制注入 `security-engineer`（位于当前 Agent 之后） | 排序约束，不仅是包含关系 |
+| `new-schema` | 强制同时包含 `database-admin` + `backend-dev`（并行） | Schema 工作同时需要两者 |
+| `pre-release` | 强制在最后添加 `code-reviewer`（若尚未包含） | 即使注册表未匹配也须包含 |
+| `unclear-requirements` | 强制在所有实现者之前添加 `product-analyst` | 需求澄清先于实现 |
+
+表格符号：`+` 表示并行调度；`→` 表示顺序（前者完成后调度后者）。
+
+**步骤 3：输出最终团队**
+
+合并注册表匹配结果与覆盖调整，输出有序团队列表（含并行标记），传入调度报告格式。若 `registry-reader` 返回了 `未匹配信号`，在调度报告中列出。
 
 ### 第二阶段：记忆调整
 
-在第一阶段组建团队后，查询与同一领域相关标签的记忆结果：
+在第一阶段组建团队后，以以下参数调用 `memory-reader`：`phase`（当前阶段）、`task`（当前任务标题和描述）。将与领域标签相关的 `inform_dispatch` 条目应用于以下调整逻辑：
 - 若历史结果显示 Agent X 在类似任务中失败 → 在 X 的上下文块中记录先前失败，考虑在 X 之后添加审查 Agent
 - 若历史结果显示 Agent 组合 Y+Z 存在冲突 → 重新排序或分开它们
 
@@ -80,6 +93,8 @@ Agent 输出中的显式 `[INJECT: ...]` 标记为硬注入 — 不可选。
 状态：[完成 / 进行中 / 阻塞]
 使用的 Agents：[列表，包括添加的非计划 Agent 及原因]
 已满足标准：[N/M]
+记忆调整：[应用的调整，或"无"]
+失败记录：[失败类型 / 重试次数，或"无"]
 下一个任务：[id 和标题]
 ```
 
