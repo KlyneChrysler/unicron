@@ -61,6 +61,7 @@ Auditor 技能展示健康报告后，询问：
 | `/unicron:forget <topic>` | 查找并删除匹配的记忆条目 |
 | `/unicron:memory` | 显示该项目及全局的所有记忆条目 |
 | `/unicron:registry [agent?]` | 显示注册表中所有 Agent 的触发器、能力和协作关系；可传入 Agent 名称以过滤单条 |
+| `/unicron:challenge <task-id>` | 对指定任务运行对抗性检查，展示完整报告（含 Advisory 发现）；不影响调度状态 |
 
 ## 记忆命令
 
@@ -108,6 +109,14 @@ Registry — [N] agents
 ```
 
 3. 若传入 Agent 名称（如 `/unicron:registry backend-dev`）：仅打印该 Agent 的条目。若 Agent 不在注册表中：输出 `未找到 Agent：[name]`。
+
+**`/unicron:challenge <task-id>`**
+
+1. 读取 `docs/unicron/plan.md`，找到匹配 `<task-id>` 的任务。若未找到：输出 `未找到任务：[task-id]。请检查 docs/unicron/plan.md 中的任务 ID。`，停止执行。
+2. 读取 `docs/unicron/spec.md`，提取与该任务相关的章节作为 `spec_excerpt`。
+3. 调用 `adversarial-pass`，传入完整任务上下文。若团队已组建则包含；否则传入 `assembled_team: not yet assembled`。
+4. 向用户展示完整挑战报告，**包含 Advisory 发现**（与自动触发路径不同，后者静默忽略 Advisory）。
+5. 不修改调度状态，不暂停或阻塞任何进行中的调度。
 
 ## 原则
 
