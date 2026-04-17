@@ -7,6 +7,12 @@ description: "Phase gate evaluation. Verifies all tasks in the phase are complet
 
 你正在运行阶段关卡。在下一个阶段开始之前，所有任务必须完成、测试必须通过，并且必须获得强制签署确认。
 
+## 预关卡：模式分析
+
+在运行关卡检查之前，调用 `pattern-detector`，传入 `phase`（当前阶段编号）。
+
+等待 `pattern-detector` 完成（报告 + 晋升 + 清除热缓存）后再继续关卡检查。模式检测是建议性的 — 即使 `pattern-detector` 未发现任何模式，关卡检查也必须继续运行。
+
 ## 关卡检查清单
 
 按顺序运行每项检查。如果任何检查失败，关卡即为阻塞状态。
