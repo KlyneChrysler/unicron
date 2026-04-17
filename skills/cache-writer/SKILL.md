@@ -27,17 +27,14 @@ description: "Write-only hot cache appender. Called by dispatcher after each age
 
 检查 `.unicron/cache/hot.md` 是否存在：
 - 如果不存在：创建文件，写入以下标题：
-  ```
   # Unicron Hot Cache
   _Session started: YYYY-MM-DD_
-  ```
   其中 `YYYY-MM-DD` 为今天的日期。
 
 ### 2. 追加条目
 
 向 `hot.md` 追加以下格式的条目（在文件末尾，前后各留一个空行）：
 
-```markdown
 ## [agent] — [task_id] — [YYYY-MM-DD HH:MM]
 - outcome: [outcome]
 - failure_type: [failure_type]
@@ -45,7 +42,6 @@ description: "Write-only hot cache appender. Called by dispatcher after each age
 - signals_matched: [[signal1, signal2, …]]
 - injections_fired: [injections_fired]
 - notes: [一句话摘要，来自 Agent 输出中的关键决策或问题；若无则写"—"]
-```
 
 ### 3. 退出
 
