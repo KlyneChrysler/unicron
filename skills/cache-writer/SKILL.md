@@ -17,6 +17,7 @@ description: "Write-only hot cache appender. Called by dispatcher after each age
 - `retry_count`：此 Agent 在此任务上的重试次数（首次成功为 0）
 - `signals_matched`：来自 CTO 第一阶段内容分析的信号列表（如未提供则写 `[]`）
 - `injections_fired`：步骤 4b 中注入的 Agent 列表，或 `none`
+- `challenges_fired`：步骤 2b 中触发的挑战类型 ID 列表（如 `[ac-completeness, risk-surface]`），或 `none`（如未提供则写 `none`）
 
 ## 流程
 
@@ -43,6 +44,7 @@ description: "Write-only hot cache appender. Called by dispatcher after each age
 - retry_count: [retry_count]
 - signals_matched: [[signal1, signal2, …]]
 - injections_fired: [injections_fired]
+- challenges_fired: [challenges_fired]
 - notes: [一句话摘要，来自 Agent 输出中的关键决策或问题；若无则写"—"]
 
 ### 3. 退出
