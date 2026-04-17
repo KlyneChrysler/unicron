@@ -34,7 +34,7 @@ description: "Read-only registry lookup skill. Given a list of task signals, rea
 **始终从输出中排除以下 Agent**（无论触发器是否匹配）：
 `cto`、`memory-writer`、`memory-reader`
 
-若某个 Agent 条目缺少 `triggers` 字段：静默跳过该条目，不报错。
+若某个 Agent 条目缺少 `triggers` 字段，或 `triggers` 字段值不是列表类型（如字符串或 null）：静默跳过该条目，不报错。
 
 ### 步骤 3：并行展开
 
@@ -51,6 +51,8 @@ description: "Read-only registry lookup skill. Given a list of task signals, rea
 3. `qa-engineer` 排在实现者之后（若已匹配）
 4. `code-reviewer` 始终最后（若已匹配）
 5. 其余 Agent 按其在 `registry.yaml` 中的出现顺序排列
+
+同一层级内有多个 Agent 时，按其在 `registry.yaml` 中的出现顺序排列。
 
 ### 步骤 5：输出
 
