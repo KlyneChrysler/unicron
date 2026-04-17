@@ -16,7 +16,7 @@ description: "Read-only registry lookup skill. Given a list of task signals, rea
 
 ### 步骤 1：读取注册表
 
-读取 `registry.yaml`。如果文件不存在或无法读取：
+读取项目根目录下的 `registry.yaml`。如果文件不存在或无法读取：
 
 ```
 ⛔ registry-reader 错误：无法读取 registry.yaml。
@@ -34,11 +34,14 @@ description: "Read-only registry lookup skill. Given a list of task signals, rea
 **始终从输出中排除以下 Agent**（无论触发器是否匹配）：
 `cto`、`memory-writer`、`memory-reader`
 
+若某个 Agent 条目缺少 `triggers` 字段：静默跳过该条目，不报错。
+
 ### 步骤 3：并行展开
 
 对每个已匹配的 Agent，检查其 `works_with` 列表：
 - 若列出的伙伴 Agent 也在匹配集中 → 标记两者为并行
 - 若列出的伙伴 Agent 不在匹配集中 → 忽略（不自动添加）
+- 若列出的伙伴 Agent 名称在 `registry.yaml` 中不存在：同样忽略（视为不在匹配集中）
 
 ### 步骤 4：排序
 
@@ -47,7 +50,7 @@ description: "Read-only registry lookup skill. Given a list of task signals, rea
 2. 实现者（`backend-dev`、`frontend-dev`、`mobile-dev`、`database-admin`、`security-engineer`）居中
 3. `qa-engineer` 排在实现者之后（若已匹配）
 4. `code-reviewer` 始终最后（若已匹配）
-5. 其余 Agent 按注册表中的自然匹配顺序排列
+5. 其余 Agent 按其在 `registry.yaml` 中的出现顺序排列
 
 ### 步骤 5：输出
 
@@ -59,6 +62,8 @@ description: "Read-only registry lookup skill. Given a list of task signals, rea
 
 未匹配信号：[未命中任何 Agent 触发器的信号列表，或"无"]
 ```
+
+`并行：` 字段：若当前 Agent 的所有 `works_with` 伙伴均不在匹配集中，填写 `—`。若有多个并行伙伴，以逗号分隔列出。`触发：` 字段中多个触发器同样以逗号分隔。
 
 若无任何 Agent 匹配：
 
