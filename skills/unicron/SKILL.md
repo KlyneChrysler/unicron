@@ -60,6 +60,7 @@ Auditor 技能展示健康报告后，询问：
 | `/unicron:remember <note>` | 手动保存记忆条目 |
 | `/unicron:forget <topic>` | 查找并删除匹配的记忆条目 |
 | `/unicron:memory` | 显示该项目及全局的所有记忆条目 |
+| `/unicron:registry [agent?]` | 显示注册表中所有 Agent 的触发器、能力和协作关系；可传入 Agent 名称以过滤单条 |
 
 ## 记忆命令
 
@@ -90,6 +91,23 @@ Auditor 技能展示健康报告后，询问：
 ```
 
 如果两个索引都为空或不存在：输出"暂无记忆条目。"
+
+**`/unicron:registry [agent-name?]`**
+
+1. 读取项目根目录下的 `registry.yaml`
+2. 若未传入参数：以以下格式打印所有 Agent 条目：
+
+```
+Registry — [N] agents
+
+[agent-name]
+  Description: [description]
+  Capabilities: [capabilities, comma-separated]
+  Triggers: [triggers, comma-separated]
+  Works with: [works_with, comma-separated]
+```
+
+3. 若传入 Agent 名称（如 `/unicron:registry backend-dev`）：仅打印该 Agent 的条目。若 Agent 不在注册表中：输出 `未找到 Agent：[name]`。
 
 ## 原则
 
